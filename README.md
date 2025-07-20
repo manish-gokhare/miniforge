@@ -1,4 +1,4 @@
-# miniforge installation
+#Miniforge installation
 
 Installation script for conda  - miniforge.sh
 
@@ -8,16 +8,23 @@ chmod +x miniforge.sh
 
 ./miniforge.sh
 
-# To activate conda shell use 
+#Verify myenvs is created or not
+/opt/miniforge/envs/myenvs
+
+#To activate conda shell use 
 source /opt/miniforge/etc/profile.d/conda.sh 
 
-# To activate myenvs environment
+#To activate myenvs environment
 conda active myenvs # It ends up in myenvs shell
 
-# To deactivate the runnign environment
+#To deactivate the runnign environment
 conda deactivate
 
-#To Test
+#Execute create_user.sh
+
+#Verify the user in /etc/passwd and groups.
+
+
 
 sudo -u danny -i
 
