@@ -1,0 +1,49 @@
+# create /etc/systemd/system/jupyterhub.service jupyterhub config file
+
+vi /etc/systemd/system/jupyterhub.service
+
+# Add below content in jupyterhib.service file
+[Unit]
+Description=JupyterHub
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root
+ExecStart=/opt/miniforge/envs/myenvs/bin/jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
+Restart=always
+RestartSec=10
+Environment="PATH=/opt/miniforge/envs/myenvs/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+
+[Install]
+WantedBy=multi-user.target
+
+#create log files
+sudo touch /var/log/jupyterhub.log
+sudo chown root:root /var/log/jupyterhub.log
+sudo chmod 644 /var/log/jupyterhub.log
+
+# Check /etc/jupyterhub/jupyterhub_config.py has below entry for jupyterlog.
+
+c.JupyterHub.extra_log_file = '/var/log/jupyterhub.log'
+
+#Reload and Enable 
+
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable jupyterhub
+
+# Start
+sudo systemctl start jupyterhub
+
+# Status
+sudo systemctl status jupyterhub
+
+# Realtime logs
+sudo journalctl -u jupyterhub -f
+or
+tail -f /var/log/jupyterhub.log
+
+
