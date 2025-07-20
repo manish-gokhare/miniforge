@@ -55,9 +55,20 @@ fi
 conda activate myenvs
 
 # Register the kernel system-wide
-#python -m ipykernel install --name "myenvs" --display-name "Python (myenvs)" --sys-prefix
 echo "Registering Jupyter kernel system-wide..."
-python -m ipykernel install --name "myenvs" --display-name "Python (myenvs)" --prefix /usr/local/share/jupyter
+python -m ipykernel install --name "myenvs" --display-name "Python (myenvs)" --sys-prefix 
+
+# Copy /opt/miniforge/envs/myenvs/share/jupyter/kernels/myenvs to jupyter share space.
+
+mkdir -p /usr/share/jupyter/kernels
+cp -r /opt/miniforge/envs/myenvs/share/jupyter/kernels/myenvs /usr/share/jupyter/kernels/
+
+# Make directory readable and traversable by all
+sudo chmod -R 755 /usr/share/jupyter/kernels/myenvs
+
+# Just to be sure, ensure ownership by root (optional if already so)
+sudo chown -R root:root /usr/share/jupyter/kernels/myenvs
+
 
 # Display installed packages for verification
 echo "Installed packages in 'myenvs':"
