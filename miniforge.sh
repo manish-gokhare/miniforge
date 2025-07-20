@@ -55,8 +55,9 @@ fi
 conda activate myenvs
 
 # Register the kernel system-wide
-echo "Registering Jupyter kernel..."
-python -m ipykernel install --name "myenvs" --display-name "Python (myenvs)" --sys-prefix
+#python -m ipykernel install --name "myenvs" --display-name "Python (myenvs)" --sys-prefix
+echo "Registering Jupyter kernel system-wide..."
+python -m ipykernel install --name "myenvs" --display-name "Python (myenvs)" --prefix /usr/local/share/jupyter
 
 # Display installed packages for verification
 echo "Installed packages in 'myenvs':"
