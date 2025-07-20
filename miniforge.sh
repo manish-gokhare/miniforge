@@ -1,12 +1,26 @@
 #!/bin/bash
 
-# Download and install Miniforge
-curl -LO https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
-bash Miniforge3-Linux-x86_64.sh -b -p $HOME/miniforge
+# Define install path
+INSTALL_PATH="$HOME/miniforge"
 
-# Setup PATH
-export PATH="$HOME/miniforge/bin:$PATH"
-source $HOME/miniforge/etc/profile.d/conda.sh
+# Download Miniforge if not present
+if [ ! -f Miniforge3-Linux-x86_64.sh ]; then
+    echo "Downloading Miniforge..."
+    curl -LO https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+fi
+
+# Install or update Miniforge
+if [ -d "$INSTALL_PATH" ]; then
+    echo "Miniforge already installed. Updating..."
+    bash Miniforge3-Linux-x86_64.sh -b -u -p "$INSTALL_PATH"
+else
+    echo "Installing Miniforge..."
+    bash Miniforge3-Linux-x86_64.sh -b -p "$INSTALL_PATH"
+fi
+
+# Set PATH and source conda
+export PATH="$INSTALL_PATH/bin:$PATH"
+source "$INSTALL_PATH/etc/profile.d/conda.sh"
 
 # Create environment.yml
 cat <<EOF > environment.yml
@@ -18,12 +32,21 @@ dependencies:
   - jupyterhub
   - notebook
   - ipykernel
-  - nodejs=18  # Use Node.js 18 LTS (compatible)
-  - configurable-http-proxy=4.5.4  # Known compatible version
+  - nodejs=18
+  - configurable-http-proxy=4.5.4
+EOF
 
-# Create conda environment
-conda env create -f environment.yml
+# Update or create conda environment
+if conda env list | grep -q "^myenvs"; then
+    echo "Updating conda envs"
+    conda env update -f environment.yml --prune
+else
+    echo "Creating environment 'myenvs'..."
+    conda env create -f environment.yml
+fi
 
-# Activate and test
+
+# Activate environment and test
 conda activate myenvs
-jupyter --version
+echo "Installed packages:"
+conda list | grep -E 'jupyter|python|kernel|proxy'
