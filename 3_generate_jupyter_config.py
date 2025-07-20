@@ -19,4 +19,15 @@ c.Authenticator.class_ = 'jupyterhub.auth.PAMAuthenticator'
 c.Spawner.default_url = '/lab'  # Optional: default to JupyterLab if installed
 c.Spawner.cmd = ['/opt/miniforge/envs/myenvs/bin/jupyter-labhub']
 
+# Test PAM authentication
+source /opt/miniforge/etc/profile.d/conda.sh
+conda activate myenvs
+/opt/miniforge/envs/myenvs/bin/jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
+
+#Loginto Jupyterhub 
+<externalIP>:8000
+
+
+
+
 
