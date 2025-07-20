@@ -1,0 +1,5 @@
+conda activate myenvs
+code-server --port 8888 --auth none
+
+code-server --version     # Check if it's installed
+code-server --port 8888 --auth none   # Run on port 8888 without password
