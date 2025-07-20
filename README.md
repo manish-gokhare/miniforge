@@ -11,6 +11,10 @@ chmod +x miniforge.sh
 #To Test
 
 sudo -u danny -i
+
 export PATH=/opt/miniforge/bin:\$PATH
+
 source /opt/miniforge/etc/profile.d/conda.sh
+
 jupyter kernelspec list
+
