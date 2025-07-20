@@ -45,6 +45,7 @@ else
     conda env create -f environment.yml
 fi
 
+chmod -R o+rx ~/miniforge
 
 # Activate environment and test
 conda activate myenvs
