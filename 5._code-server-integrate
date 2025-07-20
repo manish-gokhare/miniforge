@@ -1,0 +1,8 @@
+[root@euda-jul20 jupyterhub]# source /opt/miniforge/etc/profile.d/conda.sh
+[root@euda-jul20 jupyterhub]# conda activate myenvs
+
+(myenvs)[root@euda-jul20 jupyterhub]# pip install jupyterhub-nativeauthenticator
+(myenvs)[root@euda-jul20 jupyterhub]# python -c "import nativeauthenticator; print(nativeauthenticator.__file__)"
+/opt/miniforge/envs/myenvs/lib/python3.9/site-packages/nativeauthenticator/__init__.py
+
+# Install 
