@@ -1,26 +1,32 @@
 #!/bin/bash
 
-# Define install path
-INSTALL_PATH="$HOME/miniforge"
+set -e  # Exit immediately on any error
 
-# Download Miniforge if not present
+# Define install path (shared system-wide)
+INSTALL_PATH="/opt/miniforge"
+
+# Download Miniforge installer if not already present
 if [ ! -f Miniforge3-Linux-x86_64.sh ]; then
     echo "Downloading Miniforge..."
     curl -LO https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
 fi
 
-# Install or update Miniforge
+# Install or update Miniforge in /opt
 if [ -d "$INSTALL_PATH" ]; then
     echo "Miniforge already installed. Updating..."
-    bash Miniforge3-Linux-x86_64.sh -b -u -p "$INSTALL_PATH"
+    sudo bash Miniforge3-Linux-x86_64.sh -b -u -p "$INSTALL_PATH"
 else
     echo "Installing Miniforge..."
-    bash Miniforge3-Linux-x86_64.sh -b -p "$INSTALL_PATH"
+    sudo bash Miniforge3-Linux-x86_64.sh -b -p "$INSTALL_PATH"
 fi
 
 # Set PATH and source conda
 export PATH="$INSTALL_PATH/bin:$PATH"
 source "$INSTALL_PATH/etc/profile.d/conda.sh"
+
+# Make sure /opt/miniforge is accessible to all users
+echo "Setting permissions for shared access..."
+sudo chmod -R o+rx "$INSTALL_PATH"
 
 # Create environment.yml
 cat <<EOF > environment.yml
@@ -36,18 +42,22 @@ dependencies:
   - configurable-http-proxy=4.5.4
 EOF
 
-# Update or create conda environment
-if conda env list | grep -q "^myenvs"; then
-    echo "Updating conda envs"
+# Create or update the Conda environment
+if conda info --envs | grep -qE "^\s*myenvs\s"; then
+    echo "Environment 'myenvs' already exists. Updating..."
     conda env update -f environment.yml --prune
 else
     echo "Creating environment 'myenvs'..."
     conda env create -f environment.yml
 fi
 
-chmod -R o+rx ~/miniforge
-
-# Activate environment and test
+# Activate environment
 conda activate myenvs
-echo "Installed packages:"
+
+# Register the kernel system-wide
+echo "Registering Jupyter kernel..."
+python -m ipykernel install --name "myenvs" --display-name "Python (myenvs)" --sys-prefix
+
+# Display installed packages for verification
+echo "Installed packages in 'myenvs':"
 conda list | grep -E 'jupyter|python|kernel|proxy'
