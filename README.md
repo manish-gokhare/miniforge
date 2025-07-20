@@ -1,4 +1,4 @@
-#Miniforge installation
+# Miniforge installation
 
 Installation script for conda  - miniforge.sh
 
@@ -20,6 +20,7 @@ conda active myenvs # It ends up in myenvs shell
 #To deactivate the runnign environment
 conda deactivate
 
+# User creation
 #Execute create_user.sh
 
 #Verify the user in /etc/passwd and groups.
